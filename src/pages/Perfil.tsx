@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 
 export default function Perfil() {
-  const { user, profile, refreshProfile } = useAuth()
+  const { user, profile, isAdmin, refreshProfile } = useAuth()
   const [fullName, setFullName] = useState(profile?.full_name || '')
   const [cedula, setCedula] = useState(profile?.cedula || '')
   const [phone, setPhone] = useState(profile?.phone || '')
@@ -11,6 +11,12 @@ export default function Perfil() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
+
+  // Evaluación directa para forzar la insignia de Administrador
+  const esAdministrador = 
+    isAdmin || 
+    profile?.role === 'admin' || 
+    user?.email?.toLowerCase() === 'notipersonales2026@gmail.com'
 
   useEffect(() => {
     if (profile) {
@@ -62,12 +68,12 @@ export default function Perfil() {
         <div className="card" style={{ marginBottom: '1.5rem' }}>
           <div className="detail-row">
             <span className="detail-label">Correo</span>
-            <span className="detail-value">{profile?.email}</span>
+            <span className="detail-value">{user?.email || profile?.email}</span>
           </div>
           <div className="detail-row">
             <span className="detail-label">Rol</span>
             <span className="detail-value">
-              {profile?.role === 'admin' ? (
+              {esAdministrador ? (
                 <span className="badge badge-admin">Administrador</span>
               ) : (
                 <span className="badge badge-cliente">Cliente</span>
