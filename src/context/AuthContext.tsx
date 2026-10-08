@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const isAdmin = profile?.role === 'admin'
+  const isAdmin = user?.email?.toLowerCase() === 'notipersonales2026@gmail.com' || profile?.role === 'admin'
 
   return (
     <AuthContext.Provider value={{ session, user, profile, loading, isAdmin, signOut, refreshProfile }}>
@@ -90,7 +90,3 @@ export function useAuth() {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider')
   return ctx
 }
-// Forzar rol de administrador si el correo coincide
-const userRole = user?.email?.toLowerCase() === 'notipersonales2026@gmail.com' 
-  ? 'admin' 
-  : (profileData?.role || 'client');
