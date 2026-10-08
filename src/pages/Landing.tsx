@@ -6,46 +6,101 @@ export default function Landing() {
 
   return (
     <>
+      {/* Hero */}
       <section className="hero">
-        <h1>Expón tu caso</h1>
-        <p>LEXACASO — Empieza por poner tu caso en orden. Presenta tu situación, adjunta documentos y recibe un número de seguimiento en tiempo real.</p>
+        <p className="hero-tagline">¿No sabes por dónde empezar con tu caso?</p>
+        <h1>Empieza por ponerlo en orden.</h1>
+        <p>
+          Organiza tus documentos, hechos y fechas. Analiza la información de tu caso
+          y descubre qué aspectos requieren atención o verificación.
+        </p>
         <div className="hero-actions">
           {user ? (
-            <Link to="/nuevo-caso" className="btn btn-primary btn-lg">Presentar nuevo caso</Link>
+            <Link to="/nuevo-caso" className="hero-btn-exponer">
+              Expón tu caso &rarr;
+            </Link>
           ) : (
-            <Link to="/signup" className="btn btn-primary btn-lg">Crear cuenta</Link>
+            <Link to="/signup" className="hero-btn-exponer">
+              Expón tu caso &rarr;
+            </Link>
           )}
-          <Link to="/seguimiento" className="btn btn-secondary btn-lg">Consultar radicado</Link>
-          {isAdmin && (
-            <Link to="/admin" className="btn btn-secondary btn-lg">Panel de administración</Link>
+          {user ? (
+            <Link to="/mis-casos" className="btn btn-secondary btn-lg">Ver mis casos</Link>
+          ) : (
+            <Link to="/seguimiento" className="btn btn-secondary btn-lg">Consultar radicado</Link>
           )}
+          {isAdmin && <Link to="/admin" className="btn btn-secondary btn-lg">Panel de administración</Link>}
         </div>
       </section>
 
+      {/* Three feature cards: Documentos, Análisis, Privacidad */}
       <div className="main-content">
+        <div className="section-title">
+          <h2>Un espacio para ordenar antes de decidir.</h2>
+        </div>
         <div className="features">
           <div className="feature-card">
-            <div className="feature-icon" style={{ background: 'var(--primary-100)', color: 'var(--primary-600)' }}>1</div>
-            <h3>Registra tu caso</h3>
-            <p>Completa el formulario con tus datos personales y la descripción de tu situación legal.</p>
+            <div className="feature-icon" style={{ background: 'var(--primary-50)', color: 'var(--primary-700)' }}>
+              &#128196;
+            </div>
+            <h3>Documentos</h3>
+            <p>Reúne tus archivos en un solo lugar: PDF, Word, Excel, ZIP, RAR e imágenes. Todo queda asociado a tu caso.</p>
           </div>
           <div className="feature-card">
-            <div className="feature-icon" style={{ background: 'var(--success-50)', color: 'var(--success-600)' }}>2</div>
-            <h3>Adjunta documentos</h3>
-            <p>Sube archivos PDF, Word, Excel, ZIP, RAR o imágenes para respaldar tu caso.</p>
+            <div className="feature-icon" style={{ background: 'var(--success-50)', color: 'var(--success-700)' }}>
+              &#128202;
+            </div>
+            <h3>Análisis</h3>
+            <p>Genera resúmenes, asuntos jurídicos y puntos para verificar. Identifica qué aspectos de tu caso requieren atención.</p>
           </div>
           <div className="feature-card">
-            <div className="feature-icon" style={{ background: 'var(--warning-50)', color: 'var(--warning-600)' }}>3</div>
-            <h3>Recibe tu radicado</h3>
-            <p>Obtén un número único de seguimiento y notificación automática por correo electrónico.</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon" style={{ background: 'var(--accent-100)', color: 'var(--accent-600)' }}>4</div>
-            <h3>Sigue en tiempo real</h3>
-            <p>Consulta el estado de tu caso en cualquier momento con tu número de radicado.</p>
+            <div className="feature-icon" style={{ background: 'var(--neutral-100)', color: 'var(--neutral-700)' }}>
+              &#128274;
+            </div>
+            <h3>Privacidad</h3>
+            <p>Cada cliente solo puede consultar sus propios trámites y documentos. No se muestran casos públicos ni expedientes de otros.</p>
           </div>
         </div>
       </div>
+
+      {/* Steps section */}
+      <div className="steps-section">
+        <div className="section-title" style={{ paddingTop: 0 }}>
+          <h2>Tu caso, en buenas manos.</h2>
+          <p>Una imagen jurídica, elegante y reconocible para presentar LEXACASO como un espacio serio para organizar información antes de tomar decisiones.</p>
+        </div>
+        <div className="steps-grid">
+          <div className="step-card">
+            <div className="step-number">1</div>
+            <h3>Expón</h3>
+            <p>Escribe los hechos principales y ubica el tipo de situación.</p>
+          </div>
+          <div className="step-card">
+            <div className="step-number">2</div>
+            <h3>Organiza</h3>
+            <p>Reúne documentos y construye una cronología clara.</p>
+          </div>
+          <div className="step-card">
+            <div className="step-number">3</div>
+            <h3>Analiza</h3>
+            <p>Genera resúmenes, asuntos jurídicos y puntos para verificar.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Privacy section */}
+      <section className="privacy-section">
+        <h2>Tus expedientes no son públicos.</h2>
+        <p>
+          No se muestran casos de ejemplo, expedientes activos ni documentos de clientes en la página pública.
+          Para consultar tus trámites debes iniciar sesión.
+        </p>
+        {!user && (
+          <div style={{ marginTop: '1.5rem' }}>
+            <Link to="/login" className="btn btn-primary btn-lg">Ingresar</Link>
+          </div>
+        )}
+      </section>
     </>
   )
 }

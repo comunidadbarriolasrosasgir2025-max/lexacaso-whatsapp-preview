@@ -10,6 +10,7 @@ import Perfil from './pages/Perfil'
 import Admin from './pages/Admin'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import WhatsAppFloat from './components/WhatsAppFloat'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
@@ -56,6 +57,7 @@ export default function App() {
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       {!hideHeader && <Footer />}
+      <WhatsAppFloat />
     </div>
   )
 }
