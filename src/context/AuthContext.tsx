@@ -20,7 +20,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
 
-  async function loadProfile(userId: string) {
+  async function loadProfile(userId: string, currentUserEmail?: string | null) {
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
@@ -29,10 +29,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (error) {
       console.error('Error loading profile:', error)
-      return null
     }
-    setProfile(data as Profile | null)
-    return data as Profile | null
+
+    const email = currentUserEmail?.toLowerCase()
+    
+    // Si el perfil existe en Supabase
+    if (data) {
+      const updatedProfile = {
+        ...(data as Profile),
+        // Forzar rol de admin si el correo es notipersonales2026@gmail.com
+        role: email === 'notipersonales2026@gmail.com' ? 'admin' : (data.role || 'client')
+      }
+      setProfile(updatedProfile)
+      return updatedProfile
+    }
+
+    // Si aún no existe fila en la tabla profiles
+    const fallbackProfile: Profile = {
+      id: userId,
+      role: email === 'notipersonales2026@gmail.com' ? 'admin' : 'client',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+    setProfile(fallbackProfile)
+    return fallbackProfile
   }
 
   useEffect(() => {
@@ -40,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session)
       setUser(session?.user ?? null)
       if (session?.user) {
-        loadProfile(session.user.id).finally(() => setLoading(false))
+        loadProfile(session.user.id, session.user.email).finally(() => setLoading(false))
       } else {
         setLoading(false)
       }
@@ -51,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(session?.user ?? null)
       if (session?.user) {
         (async () => {
-          await loadProfile(session.user.id)
+          await loadProfile(session.user.id, session.user.email)
           setLoading(false)
         })()
       } else {
@@ -72,10 +92,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refreshProfile = async () => {
     if (user) {
-      await loadProfile(user.id)
+      await loadProfile(user.id, user.email)
     }
   }
 
+  // Confirmar la condición de Administrador
   const isAdmin = user?.email?.toLowerCase() === 'notipersonales2026@gmail.com' || profile?.role === 'admin'
 
   return (
