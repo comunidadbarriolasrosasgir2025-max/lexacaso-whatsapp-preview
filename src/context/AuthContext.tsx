@@ -90,3 +90,7 @@ export function useAuth() {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider')
   return ctx
 }
+// Forzar rol de administrador si el correo coincide
+const userRole = user?.email?.toLowerCase() === 'notipersonales2026@gmail.com' 
+  ? 'admin' 
+  : (profileData?.role || 'client');
