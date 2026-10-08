@@ -1,0 +1,2 @@
+[functions.notificar-caso]
+verify_jwt = true
